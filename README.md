@@ -1,2 +1,3 @@
 # homework-planner
-Chromework - A homework planner chrome extension
+
+https://developer.chrome.com/docs/extensions/mv3/manifest/

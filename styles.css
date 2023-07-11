@@ -1,0 +1,13 @@
+[contenteditable] {
+  outline: 0px solid transparent;
+  text-decoration: underline;
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+  text-decoration-style: dotted;
+}
+
+#uname-div > h1 {
+  display: inline-block;
+}

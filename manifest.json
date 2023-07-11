@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Homework Planner",
+  "version": "0.1",
+  "description": "Homework planner new-tab Chrome extension",
+  "author": "Vishnu B",
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "storage"
+  ]
+}
