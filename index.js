@@ -47,7 +47,7 @@ function loadSettings() {
         function () {}
       );
     }
-    $("#curr-semester").html("Semester: " + obj["settings"]["semester"]);
+    $("#curr-semester").html(obj["settings"]["semester"]);
     curr_semester = obj["settings"]["semester"];
   });
 }
@@ -91,7 +91,7 @@ function setListeners() {
 
 function setOnClickListeners() {
   // when you click the change semester button in settings, show the modal to choose semester
-  $("#change-semester").on("click", function () {
+  $("#change-semester-button").on("click", function () {
     $("#semester-select").css("display", "block");
   });
 
