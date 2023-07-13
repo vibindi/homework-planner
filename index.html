@@ -49,6 +49,7 @@
           <fieldset>
             <legend id="">Add Class</legend>
             <input required pattern="[a-zA-Z0-9\s]+" type="text" name="class-name-input" id="class-name-input">
+            <input required type="color" id="class-color-input" name="class-color-input" value="#e66465">
             <button id="add-class-button" type="submit">Add Class</button>
           </fieldset>
         </form>
@@ -74,6 +75,7 @@
       <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h1 id="class-info-name"></h1>
+        <button type="button" id="delete-class-button">Delete Class</button>
       </div>
     </div>
 </body>
