@@ -21,9 +21,41 @@
     </div>
 
     <div id="classes-div">
-      
+      <h3>Classes</h3>
+      <button type="button" id="add-class-button">Add Class</button>
     </div>
 
+    <div id="task-calendar">
+
+    </div>
+
+    <div id="weekly-class-schedule">
+
+    </div>
+
+    <div id="todo-list">
+
+    </div>
+
+    <div id="spotify-player">
+
+    </div>
+
+    <!-- Add Class Modal -->
+    <div id="class-create" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <form id="add-class">
+          <fieldset>
+            <legend id="">Add Class</legend>
+            <input required pattern="[a-zA-Z0-9\s]+" type="text" name="class-name-input" id="class-name-input">
+            <button id="add-class-button" type="submit">Add Class</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <!-- Semester Selection Modal -->
     <div id="semester-select" class="modal">
       <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -34,6 +66,14 @@
             <button id="add-semester-button" type="submit">Add Semester</button>
           </fieldset>
         </form>
+      </div>
+    </div>
+
+    <!-- Class Info Modal -->
+    <div id="class-info-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h1 id="class-info-name"></h1>
       </div>
     </div>
 </body>

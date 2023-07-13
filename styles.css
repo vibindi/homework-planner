@@ -73,3 +73,18 @@ body {
 	color: #fff;
 	background-color: #191919;
 }
+
+.choose-class-button {
+  display: inline-block;
+	font-weight: 400;
+	color: #212529;
+	text-align: center;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+  margin: 10px;
+	font-size: 1rem;
+	line-height: 1.5;
+  border: white 2px solid;
+	color: #fff;
+	background-color: #191919;
+}
