@@ -1,6 +1,13 @@
+@font-face {
+  font-family: mainFont;
+  src: url(fonts/Roboto_Slab/static/RobotoSlab-Light.ttf);
+}
+
 body {
-  background-color: #191919;
-  color: white;
+  background-color: #0A2647;
+  color: #2C74B3;
+  font-family: mainFont;
+  margin: 0;
 }
 
 [contenteditable] {
@@ -13,9 +20,56 @@ body {
   text-decoration-style: dotted;
 }
 
-#uname-div > h1 {
-  display: inline-block;
+#uname-div {
+  float: right;
+  padding: .375rem .75rem;
 }
+
+#uname-div > h1 {
+  display: inline; 
+}
+
+#settings-button {
+  float: right;
+}
+
+
+#site-header {
+  font-size: 1rem;
+  right: 0;
+  padding: 40px;
+  color: #0A2647;
+  background-color: #2C74B3;
+}
+
+#site-header > button {
+  display: inline-block;
+	font-weight: 400;
+	color: #2C74B3;
+	text-align: center;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+  margin: 10px;
+	font-size: 1rem;
+	line-height: 1.5;
+	background-color: #0A2647;
+}
+
+#site-header > button:hover {
+  color: #0A2647;
+  border: #0A2647 1px solid;
+	background-color: #2C74B3;
+}
+
+.setting-div {
+  font-size: 1rem;
+  right: 0;
+  padding: 40px;
+  color: #2C74B3;
+  background-color: #0A2647;
+}
+
+/* MODAL */
 
 .modal {
   display: none; /* Hidden by default */
@@ -27,51 +81,95 @@ body {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: #191919; /* Fallback color */
-  background-color: #191919; /* Black w/ opacity */
+  background-color: #0A2647; /* Fallback color */
 }
 
 .modal-content {
-  background-color: #191919;
+  background-color: #0A2647;
   margin: auto;
   padding: 20px;
-  border: 1px solid white;
+  border: 1px solid #2C74B3;
   width: 80%;
 }
 
-.close {
-  color: #aaaaaa;
+.close-modal {
+  color: #2C74B3;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
-  color: #000;
+.close-modal:hover,
+.close-modal:focus {
+  color: #205295;
   text-decoration: none;
   cursor: pointer;
 }
 
-.close-modal {
-  font-size: 2rem;
-  padding: 10px;
-  float: right;
+input[type=text] {
+  display: inline-block;
+	font-weight: 400;
+	color: #2C74B3;
+	text-align: center;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+  margin: 10px;
+	font-size: 1rem;
+  font-family: mainFont;
+	line-height: 1.5;
+  border: #2C74B3 1px solid;
+	background-color: transparent;
+}
+
+input[type=text]::placeholder {
+  color: rgb(44, 116, 179, 0.4);
+  font-family: mainFont;
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  font-family: mainFont;
 }
 
 .choose-semester-button {
   display: inline-block;
 	font-weight: 400;
-	color: #212529;
+	color: #2C74B3;
 	text-align: center;
 	border: 1px solid transparent;
 	padding: .375rem .75rem;
   margin: 10px;
 	font-size: 1rem;
 	line-height: 1.5;
-  border: white 2px solid;
-	color: #fff;
-	background-color: #191919;
+  border: #2C74B3 1px solid;
+	background-color: transparent;
+}
+
+.choose-semester-button:hover {
+	color: #0A2647;
+	background-color: #2C74B3;
+}
+
+#add-semester-button, #change-name-button {
+  display: inline-block;
+	font-weight: 400;
+	color: #0A2647;
+	text-align: center;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+  margin: 10px;
+	font-size: 1rem;
+	line-height: 1.5;
+	background-color: #2C74B3;
+}
+
+#add-semester-button:hover, #change-name-button:hover {
+  color: #2C74B3;
+  border: #2C74B3 1px solid;
+	background-color: #0A2647;
 }
 
 .choose-class-button {

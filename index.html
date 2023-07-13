@@ -9,15 +9,13 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <div id="uname-div">
-      <h1>Hello, &nbsp;</h1>
-      <h1 id="uname-text" contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h1>
-      <h1>!</h1>
-    </div>
-
-    <div>
-      <button type="button" id="change-semester">Change Semester</button>
+    <div id="site-header">
       <p id="curr-semester"></p>
+      <button type="button" id="change-semester">Change Semester</button>
+      <button type="button" id="settings-button">Settings</button>
+      <div id="uname-div">
+        <h1 id="uname-text"></h1>
+      </div>
     </div>
 
     <div id="classes-div">
@@ -37,6 +35,10 @@
 
     </div>
 
+    <div id="morning-briefing">
+
+    </div>
+
     <div id="spotify-player">
 
     </div>
@@ -45,13 +47,11 @@
     <div id="class-create" class="modal">
       <div class="modal-content">
         <span class="close-modal">&times;</span>
+        <h1>Add A New Class</h1>
         <form id="add-class">
-          <fieldset>
-            <legend id="">Add Class</legend>
-            <input required pattern="[a-zA-Z0-9\s]+" type="text" name="class-name-input" id="class-name-input">
-            <input required type="color" id="class-color-input" name="class-color-input" value="#e66465">
-            <button id="add-class-button" type="submit">Add Class</button>
-          </fieldset>
+          <input required pattern="[a-zA-Z0-9\s]+" type="text" name="class-name-input" id="class-name-input">
+          <input required type="color" id="class-color-input" name="class-color-input" value="#e66465">
+          <button id="add-class-button" type="submit">Add Class</button>
         </form>
       </div>
     </div>
@@ -60,12 +60,10 @@
     <div id="semester-select" class="modal">
       <div class="modal-content">
         <span class="close-modal">&times;</span>
+        <h1>Select Your Current Semester</h1>
         <form id="add-semester">
-          <fieldset>
-            <legend id="">Select Semester</legend>
-            <input required pattern="[a-zA-Z0-9\s]+" type="text" name="semester-name-input" id="semester-name-input">
-            <button id="add-semester-button" type="submit">Add Semester</button>
-          </fieldset>
+          <input required pattern="[a-zA-Z0-9\s]+" type="text" name="semester-name-input" id="semester-name-input" placeholder="Enter Semester Name">
+          <button id="add-semester-button" type="submit">Add Semester</button>
         </form>
       </div>
     </div>
@@ -75,9 +73,28 @@
       <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h1 id="class-info-name"></h1>
+
         <button type="button" id="delete-class-button">Delete Class</button>
       </div>
     </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h1>Settings</h1>
+        <div class="setting-div">
+          <h3>Change Name</h3>
+          <form id="change-name">
+            <input required type="text" name="change-name-input" id="change-name-input" placeholder="Enter Name">
+            <button id="change-name-button" type="submit">Change Name</button>
+          </form>
+        </div>
+      </div>
+      
+    </div>
+
+    <button type="button" id="clear-data-test">Clear Data Test</button>
 </body>
 <script src="thirdparty/jquery-3.7.0.min.js"></script>
 <script src="index.js"></script>

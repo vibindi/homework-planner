@@ -1,6 +1,17 @@
 /* GLOBAL VARIABLES */
 curr_semester = "";
 
+$("#clear-data-test").on("click", function () {
+  chrome.storage.local.clear(function () {
+    var error = chrome.runtime.lastError;
+    if (error) {
+      console.error(error);
+    }
+    // do something more
+    window.location.reload();
+  });
+});
+
 /* ON BODY LOAD */
 document.body.onload = function () {
   loadData();
@@ -17,37 +28,39 @@ function loadData() {
 
 function loadUname() {
   // load uname
-  chrome.storage.sync.get("uname", function (obj) {
+  chrome.storage.local.get("uname", function (obj) {
     if (obj.uname == null) {
-      chrome.storage.sync.set({ uname: "New User" }, function () {});
+      chrome.storage.local.set({ uname: "New User" }, function () {});
       $("#uname-text").html("New User");
     } else {
-      $("#uname-text").html(obj.uname);
+      $("#uname-text").html("Hello, " + obj.uname + "!");
     }
   });
 }
 
 function loadSettings() {
   // load settings
-  chrome.storage.sync.get("settings", function (obj) {
+  chrome.storage.local.get("settings", function (obj) {
     if (obj.settings == null) {
-      chrome.storage.sync.set(
-        { settings: { semester: "No Semester Selected" } },
+      chrome.storage.local.set(
+        { settings: { semester: "General Semester" } },
         function () {}
       );
     }
-    $("#curr-semester").html(obj["settings"]["semester"]);
+    $("#curr-semester").html("Semester: " + obj["settings"]["semester"]);
     curr_semester = obj["settings"]["semester"];
   });
 }
 
 function loadSemesters() {
   // load semesters
-  chrome.storage.sync.get("info", function (obj) {
+  chrome.storage.local.get("info", function (obj) {
     if (obj.info == null) {
-      chrome.storage.sync.set(
-        { info: { semesters: { "No Semester Selected": {} } } },
-        function () {}
+      chrome.storage.local.set(
+        { info: { semesters: { "General Semester": {} } } },
+        function () {
+          window.location.reload();
+        }
       );
     }
     for (let i = 0; i < Object.keys(obj["info"]["semesters"]).length; i++) {
@@ -57,7 +70,7 @@ function loadSemesters() {
 }
 
 function loadClasses() {
-  chrome.storage.sync.get("info", function (obj) {
+  chrome.storage.local.get("info", function (obj) {
     for (
       let i = 0;
       i < Object.keys(obj["info"]["semesters"][curr_semester]).length;
@@ -74,11 +87,10 @@ function loadClasses() {
 function setListeners() {
   setOnClickListeners();
   setOnSubmitListeners();
-  setOnFocusOutListeners();
 }
 
 function setOnClickListeners() {
-  // when you click the change semester button on main page, show the modal to choose semester
+  // when you click the change semester button in settings, show the modal to choose semester
   $("#change-semester").on("click", function () {
     $("#semester-select").css("display", "block");
   });
@@ -88,11 +100,23 @@ function setOnClickListeners() {
     $("#class-create").css("display", "block");
   });
 
+  // when you click the settings button on main page, show the modal for settings
+  $("#settings-button").on("click", function () {
+    $("#settings-modal").css("display", "block");
+  });
+
   // when you click the close modal button, go back to home page
-  $(".close-modal").on("click", function () {
+  $("#semester-select .close-modal").on("click", function () {
     $("#semester-select").css("display", "none");
+  });
+  $("#class-create .close-modal").on("click", function () {
     $("#class-create").css("display", "none");
+  });
+  $("#class-info-modal .close-modal").on("click", function () {
     $("#class-info-modal").css("display", "none");
+  });
+  $("#settings-modal .close-modal").on("click", function () {
+    $("#settings-modal").css("display", "none");
   });
 }
 
@@ -101,10 +125,10 @@ function setOnSubmitListeners() {
   $("#add-semester").submit(function () {
     var semester_name = $("#semester-name-input").val();
     if (semester_name === "") return;
-    chrome.storage.sync.get("info", function (obj) {
+    chrome.storage.local.get("info", function (obj) {
       var curr_info = obj.info;
       curr_info["semesters"][semester_name] = {};
-      chrome.storage.sync.set({ info: curr_info }, function () {});
+      chrome.storage.local.set({ info: curr_info }, function () {});
     });
   });
 
@@ -113,33 +137,23 @@ function setOnSubmitListeners() {
     var class_name = $("#class-name-input").val();
     var class_color = $("#class-color-input").val();
     if (class_name === "") return;
-    chrome.storage.sync.get("info", function (obj) {
+    chrome.storage.local.get("info", function (obj) {
       var curr_info = obj.info;
       curr_info["semesters"][curr_semester][class_name] = {
-        "color": class_color,
+        color: class_color,
         "class-times": [],
-        "homework": [],
-        "projects": [],
-        "exams": [],
+        homework: [],
+        projects: [],
+        exams: [],
       };
-      chrome.storage.sync.set({ info: curr_info }, function () {});
+      chrome.storage.local.set({ info: curr_info }, function () {});
     });
   });
-}
 
-function setOnFocusOutListeners() {
-  // when the name input is focused out, save the inputted text as username
-  $("#uname-text").focusout(function () {
-    var uname = $("#uname-text").html();
-    if (uname === "") {
-      uname = " ";
-      $("#uname-text").html(uname);
-    }
-    if (uname.length > 50) {
-      uname = uname.slice(0, 49);
-      $("#uname-text").html(uname);
-    }
-    chrome.storage.sync.set({ uname: uname }, function () {});
+  // when you try to change your name
+  $("#change-name").submit(function () {
+    var uname = $("#change-name-input").val();
+    chrome.storage.local.set({ uname: uname }, function () {});
   });
 }
 
@@ -153,10 +167,10 @@ function createSemesterSelectionButtons(semester_name) {
   new_semester.innerHTML = semester_name;
   new_semester.onclick = function () {
     var val = this.value;
-    chrome.storage.sync.get("settings", function (obj) {
+    chrome.storage.local.get("settings", function (obj) {
       var curr_settings = obj["settings"];
       curr_settings["semester"] = val;
-      chrome.storage.sync.set({ settings: curr_settings }, function () {});
+      chrome.storage.local.set({ settings: curr_settings }, function () {});
     });
     window.location.reload();
   };
@@ -177,10 +191,10 @@ function createClassNameButtons(class_name) {
     $("#delete-class-button").on("click", function () {
       if (confirm("You are about to delete " + val)) {
         // load semesters
-        chrome.storage.sync.get("info", function (obj) {
-          let curr_info = obj['info'];
-          delete curr_info['semesters'][curr_semester][val];
-          chrome.storage.sync.set({ info: curr_info},function () {});
+        chrome.storage.local.get("info", function (obj) {
+          let curr_info = obj["info"];
+          delete curr_info["semesters"][curr_semester][val];
+          chrome.storage.local.set({ info: curr_info }, function () {});
           window.location.reload();
         });
         alert("Deleted " + val);
@@ -189,7 +203,10 @@ function createClassNameButtons(class_name) {
     $("#class-info-modal").css("display", "block");
   };
   $("#add-class-button").after(new_class);
-  chrome.storage.sync.get("info", function (obj) {
-    $("#" + new_class.id).css("background-color", obj['info']['semesters'][curr_semester][class_name]['color'])
+  chrome.storage.local.get("info", function (obj) {
+    $("#" + new_class.id).css(
+      "background-color",
+      obj["info"]["semesters"][curr_semester][class_name]["color"]
+    );
   });
 }
