@@ -1,17 +1,6 @@
 /* GLOBAL VARIABLES */
 curr_semester = "";
 
-$("#clear-data-test").on("click", function () {
-  chrome.storage.local.clear(function () {
-    var error = chrome.runtime.lastError;
-    if (error) {
-      console.error(error);
-    }
-    // do something more
-    window.location.reload();
-  });
-});
-
 /* ON BODY LOAD */
 document.body.onload = function () {
   loadData();
@@ -100,12 +89,39 @@ function setOnClickListeners() {
     $("#class-create").css("display", "block");
   });
 
+  // when you click the add class time button, add a new class time
+  $("#add-class-time-button").on("click", function() {
+    $("#class-time-create").css("display", "block");
+  })
+  $("#add-homework-button").on("click", function() {
+    $("#homework-create").css("display", "block");
+  })
+  $("#add-projects-button").on("click", function() {
+    $("#projects-create").css("display", "block");
+  })
+  $("#add-exams-button").on("click", function() {
+    $("#exams-create").css("display", "block");
+  })
+
   // when you click the settings button on main page, show the modal for settings
   $("#settings-button").on("click", function () {
     $("#settings-modal").css("display", "block");
   });
 
   // when you click the close modal button, go back to home page
+  $("#class-time-create .close-modal").on("click", function() {
+    $("#class-time-create").css("display", "none");
+  });
+  $("#homework-create .close-modal").on("click", function() {
+    $("#homework-create").css("display", "none");
+  });
+  $("#projects-create .close-modal").on("click", function() {
+    $("#projects-create").css("display", "none");
+  });
+  $("#exams-create .close-modal").on("click", function() {
+    $("#exams-create").css("display", "none");
+  });
+
   $("#semester-select .close-modal").on("click", function () {
     $("#semester-select").css("display", "none");
   });
@@ -117,6 +133,18 @@ function setOnClickListeners() {
   });
   $("#settings-modal .close-modal").on("click", function () {
     $("#settings-modal").css("display", "none");
+  });
+
+  // when you click the reset data button, reset data
+  $("#clear-data-test").on("click", function () {
+    chrome.storage.local.clear(function () {
+      var error = chrome.runtime.lastError;
+      if (error) {
+        console.error(error);
+      }
+      // do something more
+      window.location.reload();
+    });
   });
 }
 
@@ -154,6 +182,14 @@ function setOnSubmitListeners() {
   $("#change-name").submit(function () {
     var uname = $("#change-name-input").val();
     chrome.storage.local.set({ uname: uname }, function () {});
+  });
+
+  // when you want to add a class time
+  $("#add-class-time").submit(function() {
+    var cname = $("#class-time-name-input").val();
+    var cdate = $("#class-time-date-input").val();
+    var cstart = $("#class-time-start-input").val();
+    var cend = $("#class-time-end-input").val();
   });
 }
 
