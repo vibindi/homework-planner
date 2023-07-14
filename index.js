@@ -202,7 +202,7 @@ function createClassNameButtons(class_name) {
     });
     $("#class-info-modal").css("display", "block");
   };
-  $("#add-class-button").after(new_class);
+  $("#classes-buttons-div").append(new_class);
   chrome.storage.local.get("info", function (obj) {
     $("#" + new_class.id).css(
       "background-color",
