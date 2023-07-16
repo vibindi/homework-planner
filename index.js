@@ -185,7 +185,7 @@ function setOnSubmitListeners() {
     chrome.storage.local.set({ uname: uname }, function () {});
   });
 
-  // when you want to add a class time
+  // when you want to add a homework
   $("#add-homework").submit(function () {
     var cname = $("#homework-name-input").val();
     var cdate = $("#homework-date-input").val();
@@ -197,6 +197,42 @@ function setOnSubmitListeners() {
         'name' : cname,
         'date' : cdate,
         'time' : ctime
+      });
+      chrome.storage.local.set({ info: curr_info}, function() {});
+    });
+  });
+
+  // when you want to add a project
+  $("#add-project").submit(function () {
+    var cname = $("#project-name-input").val();
+    var cdate = $("#project-date-input").val();
+    var ctime = $("#project-time-input").val();
+
+    chrome.storage.local.get("info", function (obj) {
+      var curr_info = obj.info;
+      curr_info["semesters"][curr_semester][curr_class]['projects'].push({
+        'name' : cname,
+        'date' : cdate,
+        'time' : ctime
+      });
+      chrome.storage.local.set({ info: curr_info}, function() {});
+    });
+  });
+
+  // when you want to add an exam
+  $("#add-exam").submit(function () {
+    var cname = $("#exam-name-input").val();
+    var cdate = $("#exam-date-input").val();
+    var cstart = $("#exam-start-input").val();
+    var cend = $("#exam-end-input").val();
+
+    chrome.storage.local.get("info", function (obj) {
+      var curr_info = obj.info;
+      curr_info["semesters"][curr_semester][curr_class]['exams'].push({
+        'name' : cname,
+        'date' : cdate,
+        'start' : cstart,
+        'end' : cend
       });
       chrome.storage.local.set({ info: curr_info}, function() {});
     });
@@ -256,5 +292,6 @@ function createClassNameButtons(class_name) {
       "background-color",
       obj["info"]["semesters"][curr_semester][class_name]["color"]
     );
+    console.log(obj['info']['semesters'][curr_semester][class_name])
   });
 }

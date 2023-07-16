@@ -157,6 +157,9 @@
         <span class="close-modal">&times;</span>
         <h1>Add Project</h1>
         <form id="add-project">
+          <input required pattern="[a-zA-Z0-9\s]+" type="text" name="project-name-input" id="project-name-input" placeholder="Project Name">
+          <input required type="date" name="project-date-input" id="project-date-input">
+          <input required type="time" name="project-time-input" id="project-time-input">
           <button id="project-button" type="submit">Add Project</button>
         </form>
       </div>
@@ -168,6 +171,10 @@
         <span class="close-modal">&times;</span>
         <h1>Add Exam</h1>
         <form id="add-exam">
+          <input required pattern="[a-zA-Z0-9\s]+" type="text" name="exam-name-input" id="exam-name-input" placeholder="Exam Name">
+          <input required type="date" name="exam-date-input" id="exam-date-input">
+          <input required type="time" name="exam-start-input" id="exam-start-input">
+          <input required type="time" name="exam-end-input" id="exam-end-input">
           <button id="exam-button" type="submit">Add Exam</button>
         </form>
       </div>
