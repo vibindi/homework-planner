@@ -99,25 +99,25 @@
         <span class="close-modal">&times;</span>
         <h1 id="class-info-name"></h1>
         <div class="class-info-div">
-          <h3>Class Times</h3>
+          <h2>Class Times</h2>
           <button type="button" id="add-class-time-button">Add Class Time</button>
           <div id="class-times-div">
           </div>
         </div>
         <div class="class-info-div">
-          <h3>Homework</h3>
+          <h2>Homework</h2>
           <button type="button" id="add-homework-button">Add Homework</button>
           <div id="homework-div">
           </div>
         </div>
         <div class="class-info-div">
-          <h3>Projects</h3>
+          <h2>Projects</h2>
           <button type="button" id="add-projects-button">Add Project</button>
           <div id="projects-div">
           </div>
         </div>
         <div class="class-info-div">
-          <h3>Exams</h3>
+          <h2>Exams</h2>
           <button type="button" id="add-exams-button">Add Exam</button>
           <div id="exams-div">
           </div>
@@ -132,6 +132,18 @@
         <span class="close-modal">&times;</span>
         <h1>Add A Class Time</h1>
         <form id="add-class-time">
+          <input required pattern="[a-zA-Z0-9\s]+" type="text" name="class-time-name-input" id="class-time-name-input" placeholder="Class Name">
+          <select name="class-time-days-input" id="class-time-days-input" multiple>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+          <input required type="time" name="class-time-start-input" id="class-time-start-input">
+          <input required type="time" name="class-time-end-input" id="class-time-end-input">
           <button id="class-time-button" type="submit">Add A Class Time</button>
         </form>
       </div>

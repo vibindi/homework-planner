@@ -185,6 +185,38 @@ function setOnSubmitListeners() {
     chrome.storage.local.set({ uname: uname }, function () {});
   });
 
+  // when you want to add a class time
+  $("#add-class-time").submit(function (event) {
+    var cname = $("#class-time-name-input").val();
+    var cdays = $("#class-time-days-input").val();
+    var cstart = $("#class-time-start-input").val();
+    var cend = $("#class-time-end-input").val();
+
+    var start_date = new Date();
+    start_date.setHours(parseInt(cstart.substring(0, 2)));
+    start_date.setMinutes(parseInt(cstart.substring(3)));
+    var end_date = new Date();
+    end_date.setHours(parseInt(cend.substring(0, 2)));
+    end_date.setMinutes(parseInt(cend.substring(3)));
+
+    if (start_date < end_date) {
+      chrome.storage.local.get("info", function (obj) {
+        var curr_info = obj.info;
+        curr_info["semesters"][curr_semester][curr_class]['class-times'].push({
+          'name' : cname,
+          'days' : cdays,
+          'start' : cstart,
+          'end' : cend
+        });
+        chrome.storage.local.set({ info: curr_info}, function() {});
+      });
+    }
+    else {
+      alert("Please enter an end time that is after the start time.");
+      event.preventDefault();
+    }
+  })
+
   // when you want to add a homework
   $("#add-homework").submit(function () {
     var cname = $("#homework-name-input").val();
@@ -220,22 +252,35 @@ function setOnSubmitListeners() {
   });
 
   // when you want to add an exam
-  $("#add-exam").submit(function () {
+  $("#add-exam").submit(function (event) {
     var cname = $("#exam-name-input").val();
     var cdate = $("#exam-date-input").val();
     var cstart = $("#exam-start-input").val();
     var cend = $("#exam-end-input").val();
 
-    chrome.storage.local.get("info", function (obj) {
-      var curr_info = obj.info;
-      curr_info["semesters"][curr_semester][curr_class]['exams'].push({
-        'name' : cname,
-        'date' : cdate,
-        'start' : cstart,
-        'end' : cend
+    var start_date = new Date();
+    start_date.setHours(parseInt(cstart.substring(0, 2)));
+    start_date.setMinutes(parseInt(cstart.substring(3)));
+    var end_date = new Date();
+    end_date.setHours(parseInt(cend.substring(0, 2)));
+    end_date.setMinutes(parseInt(cend.substring(3)));
+
+    if (start_date < end_date) {
+      chrome.storage.local.get("info", function (obj) {
+        var curr_info = obj.info;
+        curr_info["semesters"][curr_semester][curr_class]['exams'].push({
+          'name' : cname,
+          'date' : cdate,
+          'start' : cstart,
+          'end' : cend
+        });
+        chrome.storage.local.set({ info: curr_info}, function() {});
       });
-      chrome.storage.local.set({ info: curr_info}, function() {});
-    });
+    }
+    else {
+      alert("Please enter an end time that is after the start time.");
+      event.preventDefault();
+    }
   });
 }
 
@@ -271,6 +316,59 @@ function createClassNameButtons(class_name) {
     curr_class = val;
     // show class modal
     $("#class-info-name").html(val);
+    chrome.storage.local.get("info", function (obj) {
+      console.log(obj['info']['semesters'][curr_semester][class_name]['class-times'])
+      
+      var class_times = "<div>";
+      for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['class-times'].length; i++) {
+        class_times += "<div class='class-time-info-div'>" + 
+          "<h3>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['name'] + "</h3>" 
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['days'] + "</p>"
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['start'] + "</p>"
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['end'] + "</p>"
+          + "<button type='button'>Delete Class Time</button>"
+          + "</div>";
+      }
+      class_times += "</div>";
+      $("#class-times-div").html(class_times);
+
+      var homework = "<div>";
+      for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['homework'].length; i++) {
+        homework += "<div class='class-time-info-div'>" + 
+          "<h3>" + obj['info']['semesters'][curr_semester][class_name]['homework'][i]['name'] + "</h3>" 
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['homework'][i]['date'] + "</p>"
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['homework'][i]['time'] + "</p>"
+          + "<button type='button'>Delete Homework</button>"
+          + "</div>";
+      }
+      homework += "</div>";
+      $("#homework-div").html(homework);
+      
+      var projects = "<div>";
+      for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['projects'].length; i++) {
+        projects += "<div class='class-time-info-div'>" + 
+          "<h3>" + obj['info']['semesters'][curr_semester][class_name]['projects'][i]['name'] + "</h3>" 
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['projects'][i]['date'] + "</p>"
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['projects'][i]['time'] + "</p>"
+          + "<button type='button'>Delete Project</button>"
+          + "</div>";
+      }
+      projects += "</div>";
+      $("#projects-div").html(projects);
+      
+      var exams = "<div>";
+      for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['exams'].length; i++) {
+        exams += "<div class='class-time-info-div'>" + 
+          "<h3>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['name'] + "</h3>" 
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['date'] + "</p>"
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['start'] + "</p>"
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['end'] + "</p>"
+          + "<button type='button'>Delete Exam</button>"
+          + "</div>";
+      }
+      exams += "</div>";
+      $("#exams-div").html(exams);
+    });
     // when you want to delete class
     $("#delete-class-button").on("click", function () {
       if (confirm("You are about to delete " + val)) {

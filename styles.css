@@ -99,6 +99,14 @@ body {
   display: inline-block;
 }
 
+.class-time-info-div {
+  background-color: #0A2647;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #2C74B3;
+  margin: 20px;
+  width: 80%;
+}
 
 
 /* MODAL */
