@@ -2,6 +2,8 @@
 curr_semester = "";
 curr_class = "";
 
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 /* ON BODY LOAD */
 document.body.onload = function () {
   loadData();
@@ -317,15 +319,51 @@ function createClassNameButtons(class_name) {
     // show class modal
     $("#class-info-name").html(val);
     chrome.storage.local.get("info", function (obj) {
-      console.log(obj['info']['semesters'][curr_semester][class_name]['class-times'])
-      
       var class_times = "<div>";
       for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['class-times'].length; i++) {
+        var start_time = obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['start'];
+        var start_hour = parseInt(start_time.substring(0,2));
+        var start_minute = start_time.substring(3);
+        if (start_hour >= 12) {
+          // PM
+          if (start_hour == 12) {
+            start_time = start_hour + ":" + start_minute + " PM";
+          } else {
+            start_time = (start_hour % 12) + ":" + start_minute + " PM";
+          }
+        } else {
+          // AM
+          if (start_hour == 0) {
+            start_time = "12" + ":" + start_minute + " AM";
+          } else {
+            start_time = start_hour + ":" + start_minute + " AM";
+          }
+        }
+
+        var end_time = obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['end'];
+        var end_hour = parseInt(end_time.substring(0,2));
+        var end_minute = end_time.substring(3);
+        if (end_hour >= 12) {
+          // PM
+          if (end_hour == 12) {
+            end_time = end_hour + ":" + end_minute + " PM";
+          } else {
+            end_time = (end_hour % 12) + ":" + end_minute + " PM";
+          }
+        } else {
+          // AM
+          if (end_hour == 0) {
+            end_time = "12" + ":" + end_minute + " AM";
+          } else {
+            end_time = end_hour + ":" + end_minute + " AM";
+          }
+        }
+        
+
         class_times += "<div class='class-time-info-div'>" + 
           "<h3>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['name'] + "</h3>" 
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['days'] + "</p>"
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['start'] + "</p>"
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['end'] + "</p>"
+          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['days'].join(", ") + "</p>"
+          + "<p>" + start_time + " - " + end_time + "</p>"
           + "<button type='button'>Delete Class Time</button>"
           + "</div>";
       }
@@ -358,11 +396,51 @@ function createClassNameButtons(class_name) {
       
       var exams = "<div>";
       for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['exams'].length; i++) {
+        var start_time = obj['info']['semesters'][curr_semester][class_name]['exams'][i]['start'];
+        var start_hour = parseInt(start_time.substring(0,2));
+        var start_minute = start_time.substring(3);
+        if (start_hour >= 12) {
+          // PM
+          if (start_hour == 12) {
+            start_time = start_hour + ":" + start_minute + " PM";
+          } else {
+            start_time = (start_hour % 12) + ":" + start_minute + " PM";
+          }
+        } else {
+          // AM
+          if (start_hour == 0) {
+            start_time = "12" + ":" + start_minute + " AM";
+          } else {
+            start_time = start_hour + ":" + start_minute + " AM";
+          }
+        }
+
+        var end_time = obj['info']['semesters'][curr_semester][class_name]['exams'][i]['end'];
+        var end_hour = parseInt(end_time.substring(0,2));
+        var end_minute = end_time.substring(3);
+        if (end_hour >= 12) {
+          // PM
+          if (end_hour == 12) {
+            end_time = end_hour + ":" + end_minute + " PM";
+          } else {
+            end_time = (end_hour % 12) + ":" + end_minute + " PM";
+          }
+        } else {
+          // AM
+          if (end_hour == 0) {
+            end_time = "12" + ":" + end_minute + " AM";
+          } else {
+            end_time = end_hour + ":" + end_minute + " AM";
+          }
+        }
+
+        var date = obj['info']['semesters'][curr_semester][class_name]['exams'][i]['date'];
+        date = MONTHS[parseInt(date.substring(5,7)) - 1] + " " + date.substring(8) + " , " + date.substring(0,4);
+
         exams += "<div class='class-time-info-div'>" + 
           "<h3>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['name'] + "</h3>" 
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['date'] + "</p>"
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['start'] + "</p>"
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['end'] + "</p>"
+          + "<p>" + date + "</p>"
+          + "<p>" + start_time + " - " + end_time + "</p>"
           + "<button type='button'>Delete Exam</button>"
           + "</div>";
       }
