@@ -237,12 +237,21 @@ button:hover, #add-semester-button:hover, #change-name-button:hover, #change-sem
 	background-color: #191919;
 }
 
+#weekly-class-schedule > div {
+  display: flex;
+}
+
 .schedule-day {
   display: inline-block;
+  flex: 1;
   background-color: #0A2647;
   margin: 20px;
   padding: 20px;
   border: 1px solid #2C74B3;
+}
+
+.schedule-day h1 {
+  text-align: center;
 }
 
 .dot {
@@ -253,11 +262,19 @@ button:hover, #add-semester-button:hover, #change-name-button:hover, #change-sem
   display: inline-block;
 }
 
-.class-timing > h2 {
+.schedule-day > .dot {
+  height: 10px;
+  width: 10px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.class-timing > h2, .schedule-day > h2 {
   display: inline;
   margin-left: 10px;
 }
 
-.class-timing > h3 {
+.class-timing > h3, .schedule-day > h3 {
   margin-left: 17.5px;
 }

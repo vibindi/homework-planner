@@ -16,6 +16,7 @@ function loadData() {
   loadSettings();
   loadSemesters();
   loadClasses();
+  loadTodo();
   loadClassTimings();
 }
 
@@ -74,6 +75,29 @@ function loadClasses() {
       );
     }
   });
+}
+
+function loadTodo() {
+  chrome.storage.local.get("info", function(obj) {
+    for (let key of Object.keys(obj['info']['semesters'][curr_semester])) {
+      let the_class = obj['info']['semesters'][curr_semester][key];
+      var new_class = document.createElement("div");
+      new_class.setAttribute("class", "schedule-day");
+      let homeworks = "";
+      for (let homework of obj['info']['semesters'][curr_semester][key]['homework']) {
+        var date = homework['date'];
+        date = MONTHS[parseInt(date.substring(5,7)) - 1] + " " + date.substring(8) + ", " + date.substring(0,4);
+        homeworks += "<li>" + homework['name'] + " due " + date + " @ " + convertOneTime(homework['time']) + "</li>"
+      }
+      for (let homework of obj['info']['semesters'][curr_semester][key]['projects']) {
+        var date = homework['date'];
+        date = MONTHS[parseInt(date.substring(5,7)) - 1] + " " + date.substring(8) + ", " + date.substring(0,4);
+        homeworks += "<li>" + homework['name'] + " due " + date + " @ " + convertOneTime(homework['time']) + "</li>"
+      }
+      new_class.innerHTML = "<span style='background-color: " + the_class.color + ";' class='dot'></span><h2>" + key + "</h2><ul>" + homeworks + "</ul>";
+      $("#todo-list").append(new_class);
+    }
+  })
 }
 
 function loadClassTimings() {
@@ -176,6 +200,27 @@ function compareByTime(a, b) {
     return 1;
   }
   return 0;
+}
+
+function convertOneTime (time) {
+  var start_hour = parseInt(time.substring(0,2));
+  var start_minute = time.substring(3);
+  if (start_hour >= 12) {
+    // PM
+    if (start_hour == 12) {
+      time = start_hour + ":" + start_minute + " PM";
+    } else {
+      time = (start_hour % 12) + ":" + start_minute + " PM";
+    }
+  } else {
+    // AM
+    if (start_hour == 0) {
+      time = "12" + ":" + start_minute + " AM";
+    } else {
+      time = start_hour + ":" + start_minute + " AM";
+    }
+  }
+  return time;
 }
 
 function convertTime(start_time, end_time) {
