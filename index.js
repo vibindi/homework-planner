@@ -364,35 +364,107 @@ function createClassNameButtons(class_name) {
           "<h3>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['name'] + "</h3>" 
           + "<p>" + obj['info']['semesters'][curr_semester][class_name]['class-times'][i]['days'].join(", ") + "</p>"
           + "<p>" + start_time + " - " + end_time + "</p>"
-          + "<button type='button'>Delete Class Time</button>"
+          + "<button class='delete-class-time-button' type='button' value='"+ i + "'>Delete Class Time</button>"
           + "</div>";
       }
       class_times += "</div>";
       $("#class-times-div").html(class_times);
+      $(".delete-class-time-button").on("click", function() {
+        let to_remove = this.value;
+        chrome.storage.local.get("info", function(obj) {
+          let curr_info = obj['info']
+          let curr_class_times =  curr_info['semesters'][curr_semester][class_name]['class-times'];
+          curr_info['semesters'][curr_semester][class_name]['class-times'] = curr_class_times.slice(0, to_remove).concat(curr_class_times.slice(to_remove + 1));
+          chrome.storage.local.set({ info: curr_info}, function() {});
+          window.location.reload();
+        });
+      });
 
       var homework = "<div>";
       for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['homework'].length; i++) {
+        var time = obj['info']['semesters'][curr_semester][class_name]['homework'][i]['time'];
+        var time_hour = parseInt(time.substring(0,2));
+        var time_minute = time.substring(3);
+        if (time_hour >= 12) {
+          // PM
+          if (time_hour == 12) {
+            time = time_hour + ":" + time_minute + " PM";
+          } else {
+            time = (time_hour % 12) + ":" + time_minute + " PM";
+          }
+        } else {
+          // AM
+          if (time_hour == 0) {
+            time = "12" + ":" + time_minute + " AM";
+          } else {
+            time = time_hour + ":" + time_minute + " AM";
+          }
+        }
+
+        var date = obj['info']['semesters'][curr_semester][class_name]['homework'][i]['date'];
+        date = MONTHS[parseInt(date.substring(5,7)) - 1] + " " + date.substring(8) + ", " + date.substring(0,4);
+
         homework += "<div class='class-time-info-div'>" + 
           "<h3>" + obj['info']['semesters'][curr_semester][class_name]['homework'][i]['name'] + "</h3>" 
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['homework'][i]['date'] + "</p>"
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['homework'][i]['time'] + "</p>"
-          + "<button type='button'>Delete Homework</button>"
+          + "<p>" + date + " @ " + time + "</p>"
+          + "<button class='delete-homework-button' type='button' value='"+ i + "'>Delete Homework</button>"
           + "</div>";
       }
       homework += "</div>";
       $("#homework-div").html(homework);
+      $(".delete-homework-button").on("click", function() {
+        let to_remove = this.value;
+        chrome.storage.local.get("info", function(obj) {
+          let curr_info = obj['info']
+          let curr_homework =  curr_info['semesters'][curr_semester][class_name]['homework'];
+          curr_info['semesters'][curr_semester][class_name]['homework'] = curr_homework.slice(0, to_remove).concat(curr_homework.slice(to_remove + 1));
+          chrome.storage.local.set({ info: curr_info}, function() {});
+          window.location.reload();
+        });
+      });
       
       var projects = "<div>";
       for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['projects'].length; i++) {
+        var time = obj['info']['semesters'][curr_semester][class_name]['projects'][i]['time'];
+        var time_hour = parseInt(time.substring(0,2));
+        var time_minute = time.substring(3);
+        if (time_hour >= 12) {
+          // PM
+          if (time_hour == 12) {
+            time = time_hour + ":" + time_minute + " PM";
+          } else {
+            time = (time_hour % 12) + ":" + time_minute + " PM";
+          }
+        } else {
+          // AM
+          if (time_hour == 0) {
+            time = "12" + ":" + time_minute + " AM";
+          } else {
+            time = time_hour + ":" + time_minute + " AM";
+          }
+        }
+
+        var date = obj['info']['semesters'][curr_semester][class_name]['projects'][i]['date'];
+        date = MONTHS[parseInt(date.substring(5,7)) - 1] + " " + date.substring(8) + ", " + date.substring(0,4);
+
         projects += "<div class='class-time-info-div'>" + 
           "<h3>" + obj['info']['semesters'][curr_semester][class_name]['projects'][i]['name'] + "</h3>" 
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['projects'][i]['date'] + "</p>"
-          + "<p>" + obj['info']['semesters'][curr_semester][class_name]['projects'][i]['time'] + "</p>"
-          + "<button type='button'>Delete Project</button>"
+          + "<p>" + date + " @ " + time + "</p>"
+          + "<button class='delete-project-button' type='button' value='"+ i + "'>Delete Project</button>"
           + "</div>";
       }
       projects += "</div>";
       $("#projects-div").html(projects);
+      $(".delete-project-button").on("click", function() {
+        let to_remove = this.value;
+        chrome.storage.local.get("info", function(obj) {
+          let curr_info = obj['info']
+          let curr_projects =  curr_info['semesters'][curr_semester][class_name]['projects'];
+          curr_info['semesters'][curr_semester][class_name]['projects'] = curr_projects.slice(0, to_remove).concat(curr_projects.slice(to_remove + 1));
+          chrome.storage.local.set({ info: curr_info}, function() {});
+          window.location.reload();
+        });
+      });
       
       var exams = "<div>";
       for (let i = 0; i < obj['info']['semesters'][curr_semester][class_name]['exams'].length; i++) {
@@ -435,17 +507,28 @@ function createClassNameButtons(class_name) {
         }
 
         var date = obj['info']['semesters'][curr_semester][class_name]['exams'][i]['date'];
-        date = MONTHS[parseInt(date.substring(5,7)) - 1] + " " + date.substring(8) + " , " + date.substring(0,4);
+        date = MONTHS[parseInt(date.substring(5,7)) - 1] + " " + date.substring(8) + ", " + date.substring(0,4);
 
         exams += "<div class='class-time-info-div'>" + 
           "<h3>" + obj['info']['semesters'][curr_semester][class_name]['exams'][i]['name'] + "</h3>" 
           + "<p>" + date + "</p>"
           + "<p>" + start_time + " - " + end_time + "</p>"
-          + "<button type='button'>Delete Exam</button>"
+          + "<button class='delete-exam-button' type='button' value='"+ i + "'>Delete Exam</button>"
           + "</div>";
       }
       exams += "</div>";
       $("#exams-div").html(exams);
+      // when you want to delete an exam
+      $(".delete-exam-button").on("click", function() {
+        let to_remove = this.value;
+        chrome.storage.local.get("info", function(obj) {
+          let curr_info = obj['info']
+          let curr_exams =  curr_info['semesters'][curr_semester][class_name]['exams'];
+          curr_info['semesters'][curr_semester][class_name]['exams'] = curr_exams.slice(0, to_remove).concat(curr_exams.slice(to_remove + 1));
+          chrome.storage.local.set({ info: curr_info}, function() {});
+          window.location.reload();
+        });
+      });
     });
     // when you want to delete class
     $("#delete-class-button").on("click", function () {
