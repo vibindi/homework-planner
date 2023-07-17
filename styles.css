@@ -236,3 +236,28 @@ button:hover, #add-semester-button:hover, #change-name-button:hover, #change-sem
 	color: #fff;
 	background-color: #191919;
 }
+
+.schedule-day {
+  display: inline-block;
+  background-color: #0A2647;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #2C74B3;
+}
+
+.dot {
+  height: 7.5px;
+  width: 7.5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.class-timing > h2 {
+  display: inline;
+  margin-left: 10px;
+}
+
+.class-timing > h3 {
+  margin-left: 17.5px;
+}

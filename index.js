@@ -16,6 +16,7 @@ function loadData() {
   loadSettings();
   loadSemesters();
   loadClasses();
+  loadClassTimings();
 }
 
 function loadUname() {
@@ -73,6 +74,148 @@ function loadClasses() {
       );
     }
   });
+}
+
+function loadClassTimings() {
+  chrome.storage.local.get("info", function(obj) {
+    let monday = []
+    let tuesday = []
+    let wednesday = []
+    let thursday = []
+    let friday = []
+    let saturday = []
+    let sunday = []
+    for (let key of Object.keys(obj['info']['semesters'][curr_semester])) {
+      for (let time of obj['info']['semesters'][curr_semester][key]['class-times']) {
+        time['color'] = obj['info']['semesters'][curr_semester][key]['color'];
+        time['class'] = key;
+        //console.log(time);
+        if (time.days.includes('Monday')) {
+          monday.push(time);
+        }
+        if (time.days.includes('Tuesday')) {
+          tuesday.push(time);
+        }
+        if (time.days.includes('Wednesday')) {
+          wednesday.push(time);
+        }
+        if (time.days.includes('Thursday')) {
+          thursday.push(time);
+        }
+        if (time.days.includes('Friday')) {
+          friday.push(time);
+        }
+        if (time.days.includes('Saturday')) {
+          saturday.push(time);
+        }
+        if (time.days.includes('Sunday')) {
+          sunday.push(time);
+        }
+      }
+
+    }
+
+    monday.sort(compareByTime);
+    tuesday.sort(compareByTime);
+    wednesday.sort(compareByTime);
+    thursday.sort(compareByTime);
+    friday.sort(compareByTime);
+    saturday.sort(compareByTime);
+    sunday.sort(compareByTime);
+
+    for (let time of monday) {
+      var new_time = document.createElement("div");
+      new_time.setAttribute("class", "class-timing");
+      new_time.innerHTML = "<span style='background-color: " + time.color + ";' class='dot'></span><h2>" + time['name'] + "</h2><h3>" + time['class'] +"</h3><h3>" + convertTime(time['start'], time['end']) + "</h3>"
+      $("#weekly-monday").append(new_time);
+    }
+    for (let time of tuesday) {
+      var new_time = document.createElement("div");
+      new_time.setAttribute("class", "class-timing");
+      new_time.innerHTML = "<span style='background-color: " + time.color + ";' class='dot'></span><h2>" + time['name'] + "</h2><h3>" + time['class'] +"</h3><h3>" + convertTime(time['start'], time['end']) + "</h3>"
+      $("#weekly-tuesday").append(new_time);
+    }
+    for (let time of wednesday) {
+      var new_time = document.createElement("div");
+      new_time.setAttribute("class", "class-timing");
+      new_time.innerHTML = "<span style='background-color: " + time.color + ";' class='dot'></span><h2>" + time['name'] + "</h2><h3>" + time['class'] +"</h3><h3>" + convertTime(time['start'], time['end']) + "</h3>"
+      $("#weekly-wednesday").append(new_time);
+    }
+    for (let time of thursday) {
+      var new_time = document.createElement("div");
+      new_time.setAttribute("class", "class-timing");
+      new_time.innerHTML = "<span style='background-color: " + time.color + ";' class='dot'></span><h2>" + time['name'] + "</h2><h3>" + time['class'] +"</h3><h3>" + convertTime(time['start'], time['end']) + "</h3>"
+      $("#weekly-thursday").append(new_time);
+    }
+    for (let time of friday) {
+      var new_time = document.createElement("div");
+      new_time.setAttribute("class", "class-timing");
+      new_time.innerHTML = "<span style='background-color: " + time.color + ";' class='dot'></span><h2>" + time['name'] + "</h2><h3>" + time['class'] +"</h3><h3>" + convertTime(time['start'], time['end']) + "</h3>"
+      $("#weekly-friday").append(new_time);
+    }
+    for (let time of saturday) {
+      var new_time = document.createElement("div");
+      new_time.setAttribute("class", "class-timing");
+      new_time.innerHTML = "<span style='background-color: " + time.color + ";' class='dot'></span><h2>" + time['name'] + "</h2><h3>" + time['class'] +"</h3><h3>" + convertTime(time['start'], time['end']) + "</h3>"
+      $("#weekly-saturday").append(new_time);
+    }
+    for (let time of sunday) {
+      var new_time = document.createElement("div");
+      new_time.setAttribute("class", "class-timing");
+      new_time.innerHTML = "<span style='background-color: " + time.color + ";' class='dot'></span><h2>" + time['name'] + "</h2><h3>" + time['class'] +"</h3><h3>" + convertTime(time['start'], time['end']) + "</h3>"
+      $("#weekly-sunday").append(new_time);
+    }
+  })
+}
+
+function compareByTime(a, b) {
+  if (a.start < b.start) {
+    return -1;
+  }
+  if (a.start > b.start) {
+    return 1;
+  }
+  return 0;
+}
+
+function convertTime(start_time, end_time) {
+  var start_hour = parseInt(start_time.substring(0,2));
+  var start_minute = start_time.substring(3);
+  if (start_hour >= 12) {
+    // PM
+    if (start_hour == 12) {
+      start_time = start_hour + ":" + start_minute + " PM";
+    } else {
+      start_time = (start_hour % 12) + ":" + start_minute + " PM";
+    }
+  } else {
+    // AM
+    if (start_hour == 0) {
+      start_time = "12" + ":" + start_minute + " AM";
+    } else {
+      start_time = start_hour + ":" + start_minute + " AM";
+    }
+  }
+
+  var end_hour = parseInt(end_time.substring(0,2));
+  var end_minute = end_time.substring(3);
+  if (end_hour >= 12) {
+    // PM
+    if (end_hour == 12) {
+      end_time = end_hour + ":" + end_minute + " PM";
+    } else {
+      end_time = (end_hour % 12) + ":" + end_minute + " PM";
+    }
+  } else {
+    // AM
+    if (end_hour == 0) {
+      end_time = "12" + ":" + end_minute + " AM";
+    } else {
+      end_time = end_hour + ":" + end_minute + " AM";
+    }
+  }
+
+  return start_time + " - " + end_time;
 }
 
 /* ON BODY LOAD LISTENERS */
@@ -551,6 +694,6 @@ function createClassNameButtons(class_name) {
       "background-color",
       obj["info"]["semesters"][curr_semester][class_name]["color"]
     );
-    console.log(obj['info']['semesters'][curr_semester][class_name])
+    //console.log(obj['info']['semesters'][curr_semester][class_name])
   });
 }
